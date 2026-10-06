@@ -1,0 +1,987 @@
+<!-- Variation A: refined original -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>USD AI Society · Knauss School of Business</title>
+  <meta name="description" content="The USD AI Society is a student club at the Knauss School of Business for anyone who wants to get good at using AI. Any major, no coding needed, free to join." />
+  <link rel="icon" href="../logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:       #0b1120;
+      --navy-deep:  #0a1628;
+      --navy-mid:   #111c2e;
+      --navy-light: #1a2740;
+      --border:     rgba(160,175,200,0.14);
+      --gold:       #c9a84c;
+      --gold-soft:  #dcc07a;
+      --gold-line:  rgba(201,168,76,0.28);
+      --gold-pale:  rgba(201,168,76,0.07);
+      --silver:     #9fb1c8;
+      --text:       #d8e4f0;
+      --text-muted: #8ea6bf;
+      --heading:    #f0f4f8;
+      --nav-h:      72px;
+      --gutter:     56px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Jost', system-ui, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(11,17,32,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--gutter);
+      z-index: 100;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .nav-logo img { width: 36px; height: 36px; object-fit: contain; }
+    .nav-logo-text { display: flex; flex-direction: column; line-height: 1; }
+    .nav-logo-name {
+      font-weight: 600; font-size: 0.9rem; color: var(--heading);
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .nav-logo-sub {
+      font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--gold);
+      letter-spacing: 0.16em; text-transform: uppercase; margin-top: 4px;
+    }
+    .nav-links { display: flex; gap: 2px; list-style: none; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      color: var(--text-muted); text-decoration: none;
+      padding: 8px 14px; border-radius: 6px; border: 1px solid transparent;
+      letter-spacing: 0.06em; white-space: nowrap;
+      transition: color .2s, border-color .2s, background .2s;
+    }
+    .nav-links a:hover, .nav-links a[aria-current="page"] {
+      color: var(--gold); border-color: var(--gold-line); background: var(--gold-pale);
+    }
+    .nav-links a.nav-join { color: var(--navy); background: var(--gold); border-color: var(--gold); margin-left: 6px; }
+    .nav-links a.nav-join:hover, .nav-links a.nav-join[aria-current="page"] { background: var(--gold-soft); color: var(--navy); }
+    .menu-btn {
+      display: none;
+      font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gold); background: var(--gold-pale);
+      border: 1px solid var(--gold-line); border-radius: 6px;
+      padding: 9px 14px; cursor: pointer;
+      align-items: center; gap: 8px;
+    }
+    .menu-btn svg { width: 14px; height: 14px; }
+
+    /* PAGES */
+    .page { display: none; padding-top: var(--nav-h); min-height: 100vh; }
+    .page.active { display: block; }
+    .page:focus { outline: none; }
+
+    /* HERO */
+    .hero {
+      min-height: min(820px, calc(92vh - var(--nav-h)));
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px var(--gutter);
+      position: relative; overflow: hidden;
+      background: var(--navy-deep);
+    }
+    .hero-canvas-wrap { position: absolute; inset: 0; z-index: 0; }
+    .hero-canvas-wrap canvas { width: 100%; height: 100%; display: block; }
+    .hero-orb { position: absolute; border-radius: 50%; pointer-events: none; z-index: 1; filter: blur(120px); opacity: 0.25; }
+    .hero-orb-1 { width: 650px; height: 650px; top: 5%; left: 55%; background: radial-gradient(circle, rgba(201,169,97,0.4), transparent 70%); }
+    .hero-orb-2 { width: 480px; height: 480px; top: 40%; left: 10%; background: radial-gradient(circle, rgba(138,149,170,0.2), transparent 70%); }
+    .hero-inner {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 360px; gap: 72px; align-items: center;
+      max-width: 1200px; width: 100%; margin: 0 auto;
+    }
+    .eyebrow {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--gold);
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-bottom: 28px; display: flex; align-items: center; gap: 14px;
+    }
+    .eyebrow::before { content: ''; width: 7px; height: 7px; border: 1px solid var(--gold); transform: rotate(45deg); }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600; font-style: italic;
+      font-size: clamp(2.6rem, 5.4vw, 4.9rem);
+      line-height: 1.06; color: var(--heading);
+      margin-bottom: 30px; letter-spacing: -0.01em;
+      max-width: 15ch;
+    }
+    .hero h1 em { font-style: normal; color: var(--gold); }
+    .hero-rule { width: 48px; height: 1px; background: var(--gold); margin-bottom: 26px; }
+    .hero-desc { font-size: 1.05rem; line-height: 1.8; color: var(--text-muted); margin-bottom: 40px; font-weight: 300; max-width: 520px; }
+    .hero-compass { display: flex; justify-content: center; }
+    .hero-compass img {
+      width: 320px; height: 320px; object-fit: contain; opacity: 0.92;
+      animation: slowSpin 60s linear infinite;
+      filter: drop-shadow(0 0 40px rgba(201,168,76,0.16));
+    }
+    @keyframes slowSpin { to { transform: rotate(360deg); } }
+
+    /* BUTTONS */
+    .btn-row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 14px 28px; border-radius: 4px; text-decoration: none; cursor: pointer;
+      border: 1px solid transparent;
+      transition: background .25s, color .25s, border-color .25s, transform .25s, box-shadow .25s;
+    }
+    .btn-primary { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+    .btn-primary:hover { background: var(--gold-soft); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201,168,76,0.25); }
+    .btn-secondary { background: transparent; color: var(--silver); border-color: rgba(160,175,200,0.28); }
+    .btn-secondary:hover { border-color: var(--gold-line); color: var(--gold); transform: translateY(-2px); }
+    .btn .arrow { width: 14px; height: 10px; }
+
+    /* PLAIN SENTENCE BAND */
+    .plain {
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      background: var(--navy);
+      padding: 56px var(--gutter);
+    }
+    .plain p {
+      max-width: 900px; margin: 0 auto; text-align: center;
+      font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500;
+      font-size: clamp(1.35rem, 2.4vw, 1.9rem); line-height: 1.45; color: var(--heading);
+    }
+    .plain p span { color: var(--gold); font-style: italic; }
+
+    /* SECTIONS */
+    .section { padding: 96px max(var(--gutter), calc((100% - 1200px) / 2)); }
+    .section + .section { padding-top: 0; }
+    .section-header { margin-bottom: 48px; }
+    .section-header.split { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+    .section-tag {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--gold);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      margin-bottom: 16px; display: flex; align-items: center; gap: 14px;
+    }
+    .section-tag::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+    .section-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 600; font-style: italic;
+      color: var(--heading); letter-spacing: -0.01em; line-height: 1.12;
+    }
+    .section-lead { margin-top: 18px; max-width: 620px; font-size: 0.98rem; color: var(--text-muted); font-weight: 300; line-height: 1.8; }
+    .text-link {
+      font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold-line); padding-bottom: 3px;
+      white-space: nowrap;
+    }
+    .text-link:hover { border-color: var(--gold); }
+
+    /* NEXT EVENT CARD */
+    .next-event {
+      position: relative;
+      display: grid; grid-template-columns: 150px 1fr; gap: 0;
+      background: linear-gradient(135deg, var(--navy-light) 0%, var(--navy-mid) 60%);
+      border: 1px solid var(--gold-line);
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    }
+    .next-event::before {
+      content: ''; position: absolute; top: 0; left: 150px; right: 0; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent 70%);
+    }
+    .ne-date {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 32px 16px; border-right: 1px solid var(--gold-line);
+      background: rgba(201,168,76,0.06);
+      text-align: center;
+    }
+    .ne-month, .ne-dow { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; }
+    .ne-month { color: var(--gold); }
+    .ne-day { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 4.6rem; font-weight: 600; line-height: 1; color: var(--heading); margin: 0 0 10px; }
+    .ne-dow { color: var(--text-muted); font-size: 0.62rem; }
+    .ne-date .stack { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .ne-body { padding: 36px 40px 38px; min-width: 0; }
+    .ne-top { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+    .ne-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+    .countdown {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+      color: var(--heading); background: rgba(201,168,76,0.14);
+      border: 1px solid var(--gold-line); border-radius: 100px; padding: 4px 12px 4px 10px;
+    }
+    .countdown::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.2); }
+    .countdown[hidden] { display: none; }
+    .ne-body h3 {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 600;
+      font-size: clamp(2rem, 3.4vw, 2.8rem); line-height: 1.08; color: var(--heading); margin-bottom: 20px;
+    }
+    .ne-meta { list-style: none; display: grid; gap: 10px; margin-bottom: 26px; }
+    .ne-meta li { display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text); }
+    .ne-meta svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; color: var(--gold); }
+    .ne-text { font-size: 0.98rem; color: var(--text-muted); font-weight: 300; line-height: 1.8; max-width: 640px; margin-bottom: 14px; }
+    .ne-small { font-size: 0.85rem; color: var(--text-muted); font-style: italic; margin-bottom: 28px; max-width: 640px; }
+
+    /* CARDS (What we do) */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--navy-mid); border: 1px solid var(--border); border-radius: 8px;
+      padding: 32px 30px 34px; position: relative; overflow: hidden;
+      transition: border-color .3s, transform .3s, box-shadow .3s;
+    }
+    .card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0; transition: opacity .3s;
+    }
+    .card:hover { border-color: var(--gold-line); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.45); }
+    .card:hover::after { opacity: 1; }
+    .card-icon { width: 60px; height: 60px; margin-bottom: 22px; display: block; }
+    .card-title { font-size: 1.02rem; font-weight: 600; color: var(--heading); margin-bottom: 10px; letter-spacing: 0.01em; }
+    .card-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.75; font-weight: 300; }
+
+    /* BELIEFS (short, home) */
+    .beliefs-short { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .belief { background: var(--navy); padding: 34px 36px; display: flex; gap: 20px; }
+    .belief .num { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--gold); letter-spacing: 0.1em; padding-top: 8px; flex-shrink: 0; }
+    .belief p { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.45rem; font-weight: 500; line-height: 1.35; color: var(--heading); }
+
+    /* BELIEFS (full, mission) */
+    .values-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .values-list.single { grid-template-columns: 1fr; }
+    .value-item {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 28px 30px; background: var(--navy-mid); border: 1px solid var(--border); border-radius: 8px;
+      transition: border-color .3s;
+    }
+    .value-item:hover { border-color: var(--gold-line); }
+    .value-num { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--gold); letter-spacing: 0.1em; padding-top: 4px; flex-shrink: 0; }
+    .value-content h4 { font-size: 0.98rem; font-weight: 600; color: var(--heading); margin-bottom: 6px; letter-spacing: 0.01em; }
+    .value-content p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.75; font-weight: 300; }
+    .value-content p.lead-line { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.3rem; font-weight: 600; font-style: italic; line-height: 1.3; color: var(--heading); margin-bottom: 8px; }
+
+    .mission-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+    .mission-statement {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.45rem, 2.4vw, 1.95rem); font-weight: 600; font-style: italic;
+      color: var(--heading); line-height: 1.45;
+      padding-left: 28px; border-left: 1px solid var(--gold);
+    }
+    .attribution { margin-top: 18px; padding-left: 29px; font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+    .mission-body { font-size: 0.98rem; color: var(--text-muted); line-height: 1.9; font-weight: 300; margin-bottom: 20px; }
+    .mission-body strong { color: var(--heading); font-weight: 500; }
+    .sub-title { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 600; font-size: 1.8rem; color: var(--heading); margin-bottom: 16px; line-height: 1.2; }
+
+    /* TIMELINE */
+    .events-layout { display: grid; grid-template-columns: 1fr; gap: 88px; }
+    .notes { display: grid; grid-template-columns: 1fr 1.7fr; gap: 64px; align-items: start; }
+    .notes .section-header { position: sticky; top: calc(var(--nav-h) + 32px); }
+    .timeline { list-style: none; position: relative; max-width: 760px; }
+    .timeline::before { content: ''; position: absolute; left: 131px; top: 10px; bottom: 10px; width: 1px; background: linear-gradient(var(--gold), var(--gold-line) 20%, var(--border)); }
+    .timeline li { display: grid; grid-template-columns: 112px 40px 1fr; align-items: start; padding: 14px 0; }
+    .tl-date { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); text-align: right; padding-top: 3px; }
+    .tl-dot { justify-self: center; width: 11px; height: 11px; margin-top: 6px; border-radius: 50%; background: var(--navy); border: 1px solid var(--gold); position: relative; z-index: 1; }
+    .tl-text { font-size: 0.98rem; color: var(--text); line-height: 1.6; }
+    .timeline li.upcoming .tl-dot { background: var(--gold); box-shadow: 0 0 0 5px rgba(201,168,76,0.18); }
+    .timeline li.upcoming .tl-text { color: var(--heading); font-weight: 500; }
+    .tl-tag { display: inline-block; margin-left: 10px; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-line); border-radius: 100px; padding: 2px 10px; vertical-align: 2px; }
+    .tl-tag[hidden] { display: none; }
+
+    /* EXEC BOARD */
+    .leadership-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .leader-card {
+      background: var(--navy-mid); border: 1px solid var(--border); border-radius: 8px;
+      padding: 36px 26px 30px; text-align: center;
+      transition: border-color .3s, transform .3s, box-shadow .3s;
+    }
+    .leader-card:hover { border-color: var(--gold-line); transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.45); }
+    .leader-card.advisor { background: linear-gradient(160deg, var(--navy-light), var(--navy-mid)); border-color: var(--gold-line); }
+    .leader-avatar {
+      width: 104px; height: 104px; border-radius: 50%; margin: 0 auto 20px;
+      padding: 3px; border: 1px solid var(--gold-line);
+      display: flex; align-items: center; justify-content: center;
+      background: var(--navy-light); color: var(--gold); font-weight: 600;
+    }
+    .leader-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; border-radius: 50%; }
+    .leader-name { font-size: 1rem; font-weight: 600; color: var(--heading); margin-bottom: 6px; letter-spacing: 0.01em; }
+    .leader-role { font-family: 'DM Mono', monospace; font-size: 0.64rem; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; display: block; }
+    .leader-bio { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; font-weight: 300; }
+
+    /* CTA BOX */
+    .cta-box {
+      margin-top: 72px; padding: 56px 48px;
+      background: var(--navy-mid); border: 1px solid var(--gold-line); border-radius: 12px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-box::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 300px; max-width: 80%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+    .cta-box img { width: 64px; height: 64px; margin: 0 auto 22px; opacity: 0.95; }
+    .cta-box .big { font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(1.5rem, 2.6vw, 2.1rem); font-style: italic; font-weight: 600; color: var(--heading); line-height: 1.35; margin: 0 auto 14px; max-width: 640px; }
+    .cta-box p.small { font-size: 0.95rem; color: var(--text-muted); font-weight: 300; max-width: 520px; margin: 0 auto 32px; line-height: 1.75; }
+    .cta-box .btn-row { justify-content: center; }
+    .cta-box.join-box { margin-top: 0; padding: 48px 36px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px max(var(--gutter), calc((100% - 1200px) / 2));
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .footer-left { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.08em; }
+    .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .footer-links a { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-muted); text-decoration: none; letter-spacing: 0.1em; transition: color .2s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ANIMATION */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    .fade-up { animation: fadeUp 0.7s ease both; }
+    .d1 { animation-delay: .08s; } .d2 { animation-delay: .2s; } .d3 { animation-delay: .34s; } .d4 { animation-delay: .48s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1080px) {
+      .nav-links a { padding: 8px 10px; letter-spacing: 0.03em; }
+      .hero-inner { grid-template-columns: 1fr 280px; gap: 48px; }
+      .hero-compass img { width: 260px; height: 260px; }
+    }
+    @media (max-width: 920px) {
+      :root { --gutter: 24px; --nav-h: 64px; }
+      .menu-btn { display: inline-flex; }
+      .nav-links {
+        display: none;
+        position: absolute; top: var(--nav-h); left: 0; right: 0;
+        flex-direction: column; gap: 4px;
+        padding: 12px var(--gutter) 20px;
+        background: var(--navy); border-bottom: 1px solid var(--border); box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+      }
+      nav.open .nav-links { display: flex; }
+      .nav-links a { display: block; padding: 13px 14px; font-size: 0.78rem; }
+      .nav-links a.nav-join { margin: 6px 0 0; text-align: center; }
+      .hero { padding: 56px var(--gutter) 64px; min-height: 0; }
+      .hero-inner { grid-template-columns: 1fr; gap: 0; }
+      .hero-compass { display: none; }
+      .section { padding: 64px var(--gutter); }
+      .mission-layout { grid-template-columns: 1fr; gap: 56px; }
+      .values-list { grid-template-columns: 1fr; }
+      .notes { grid-template-columns: 1fr; gap: 0; }
+      .notes .section-header { position: static; }
+      .beliefs-short { grid-template-columns: 1fr; }
+      .plain { padding: 44px var(--gutter); }
+    }
+    @media (max-width: 640px) {
+      .hide-sm { display: none; }
+      .hero h1 { font-size: 2.55rem; }
+      .hero-desc { font-size: 1rem; }
+      .btn-row .btn { flex: 1 1 100%; }
+      .next-event { grid-template-columns: 1fr; }
+      .next-event::before { left: 0; }
+      .ne-date { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 18px 24px; border-right: 0; border-bottom: 1px solid var(--gold-line); }
+      .ne-day { font-size: 2.6rem; margin: 0; }
+      .ne-date .stack { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+      .ne-body { padding: 26px 24px 28px; }
+      .belief { padding: 26px 22px; gap: 16px; }
+      .belief p { font-size: 1.3rem; }
+      .value-item { padding: 24px 22px; gap: 16px; }
+      .timeline::before { left: 84px; }
+      .timeline li { grid-template-columns: 70px 30px 1fr; }
+      .tl-date { font-size: 0.64rem; letter-spacing: 0.06em; }
+      .tl-tag { margin: 6px 0 0; display: table; }
+      .leadership-grid { grid-template-columns: 1fr; gap: 12px; }
+      .leader-card { display: grid; grid-template-columns: 76px 1fr; gap: 18px; text-align: left; padding: 22px 20px; align-items: start; }
+      .leader-card:hover { transform: none; }
+      .leader-avatar { width: 76px; height: 76px; margin: 0; }
+      .leader-role { margin-bottom: 8px; }
+      .cta-box, .cta-box.join-box { padding: 40px 22px; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Shared SVG defs: a light wobble filter so icons feel drawn by hand -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="hand" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="7" result="n" />
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- NAV -->
+  <nav id="nav" aria-label="Main">
+    <a class="nav-logo" href="#home" data-route="home">
+      <img src="../logo.png" alt="" width="36" height="36" />
+      <span class="nav-logo-text">
+        <span class="nav-logo-name">AI Society</span>
+        <span class="nav-logo-sub">USD · Knauss<span class="hide-sm"> School of Business</span></span>
+      </span>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M1 3.5h12M1 7h12M1 10.5h12"/></svg>
+      Menu
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" data-route="home">Home</a></li>
+      <li><a href="#events" data-route="events">Events</a></li>
+      <li><a href="#board" data-route="board">Exec Board</a></li>
+      <li><a href="#mission" data-route="mission">Mission</a></li>
+      <li><a href="#work-with-us" data-route="work-with-us">Work with us</a></li>
+      <li><a href="#join" data-route="join" class="nav-join">Join</a></li>
+    </ul>
+  </nav>
+
+  <main>
+  <!-- HOME -->
+  <div class="page" id="page-home" tabindex="-1">
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-canvas-wrap" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
+      <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div>
+          <div class="eyebrow fade-up d1">University of San Diego · Knauss</div>
+          <h1 id="hero-title" class="fade-up d2">Learn AI by building something <em>you'll use tomorrow.</em></h1>
+          <div class="hero-rule fade-up d2"></div>
+          <p class="hero-desc fade-up d3">We're a student club at Knauss. We meet, we build things, and we're honest about where AI helps and where it doesn't.</p>
+          <div class="btn-row fade-up d4">
+            <a class="btn btn-primary" href="https://forms.gle/fczNEGVzD31uHVJS7" target="_blank" rel="noopener">Become a member</a>
+            <a class="btn btn-secondary" href="#events" data-route="events">See our first workshop
+              <svg class="arrow" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 5h12M9 1l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero-compass" aria-hidden="true">
+          <img src="../logo.png" alt="" width="320" height="320" />
+        </div>
+      </div>
+    </section>
+
+    <div class="plain">
+      <p>The USD AI Society is a student club at the Knauss School of Business for anyone who wants to get good at using AI. <span>Any major, no coding needed, free to join.</span></p>
+    </div>
+
+    <section class="section" aria-labelledby="home-event-title">
+      <div class="section-header">
+        <div class="section-tag">Coming up</div>
+        <h2 class="section-title" id="home-event-title">Our first workshop</h2>
+      </div>
+      <article class="next-event">
+        <div class="ne-date" aria-hidden="true">
+          <span class="ne-day">20</span>
+          <span class="stack"><span class="ne-month">Oct</span><span class="ne-dow">Tuesday</span></span>
+        </div>
+        <div class="ne-body">
+          <div class="ne-top">
+            <span class="ne-label">Next event</span>
+            <span class="countdown" data-countdown hidden></span>
+          </div>
+          <h3>Build your own agent</h3>
+          <ul class="ne-meta">
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="7.2"/><path d="M9 4.8V9l2.8 1.8"/></svg>Tuesday, October 20 · 12:30 PM</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 16.5s5.5-5 5.5-9.2A5.5 5.5 0 0 0 3.5 7.3C3.5 11.5 9 16.5 9 16.5z"/><circle cx="9" cy="7.4" r="2"/></svg>Knauss School of Business · room announced soon</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6.5" cy="6" r="2.4"/><path d="M2 15c.4-2.8 2.2-4.3 4.5-4.3S10.6 12.2 11 15"/><circle cx="12.6" cy="6.6" r="2"/><path d="M12 10.8c2 0 3.5 1.3 3.9 3.8"/></svg>60 seats · members hear first</li>
+          </ul>
+          <p class="ne-text">Bring your laptop and your USD login. You'll build a working AI assistant in Gemini for something you actually do every day.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://forms.gle/fczNEGVzD31uHVJS7" target="_blank" rel="noopener">Become a member</a>
+            <a class="btn btn-secondary" href="#events" data-route="events">Event details</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" aria-labelledby="home-believe-title">
+      <div class="section-header split">
+        <div>
+          <div class="section-tag">Mission</div>
+          <h2 class="section-title" id="home-believe-title">What we believe</h2>
+        </div>
+        <a class="text-link" href="#mission" data-route="mission">Read the full version</a>
+      </div>
+      <div class="beliefs-short">
+        <div class="belief"><span class="num">01</span><p>AI is going to show up in every job, not only the technical ones.</p></div>
+        <div class="belief"><span class="num">02</span><p>You learn it by building something you'll actually use.</p></div>
+        <div class="belief"><span class="num">03</span><p>Using AI well includes knowing where it fails.</p></div>
+        <div class="belief"><span class="num">04</span><p>The best ideas come from mixing people.</p></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="home-do-title">
+      <div class="section-header">
+        <div class="section-tag">What we do</div>
+        <h2 class="section-title" id="home-do-title">How the club works</h2>
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <svg class="card-icon" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <path d="M28 4.5c13.6-.6 23.4 9.6 23.2 23.8-.3 13.4-10.4 23.5-23.6 23.2C14.4 51.2 4.6 41.8 4.8 27.6 5 14.4 14.6 5 28 4.5z" fill="#1a2740" stroke="rgba(201,168,76,.35)" stroke-width="1"/>
+            <g filter="url(#hand)" stroke="#c9a84c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15.2 17.6c8.4-.5 17.2-.4 25.6.1l-.4 16.5c-8.3.4-16.7.4-24.9-.1z"/>
+              <path d="M11 37.8c11.2-.6 22.6-.6 34 .1l-2.2 3.2c-10 .5-19.8.4-29.6-.1z"/>
+              <path d="M22.4 25.6l-3 2.6 3 2.7M33.6 25.6l3 2.6-3 2.7M29.6 23.6l-3.2 8.4"/>
+            </g>
+          </svg>
+          <div class="card-title">Workshops where you build</div>
+          <p class="card-text">Every workshop ends with something on your laptop that works. You'll understand it because you made it.</p>
+        </div>
+        <div class="card">
+          <svg class="card-icon" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <path d="M28.6 4.8c13 .2 22.8 10.2 22.5 23.6-.3 13.6-10.6 23-23.8 22.8C14 51 4.9 41.2 5 27.8 5.2 14.6 15 4.6 28.6 4.8z" fill="#1a2740" stroke="rgba(201,168,76,.35)" stroke-width="1"/>
+            <g filter="url(#hand)" stroke="#c9a84c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="20.5" cy="24" r="4.6"/>
+              <path d="M11.6 40.4c.6-5.8 4.2-9 8.9-9s8.4 3.2 9 9"/>
+              <path d="M30.6 13.6c0-1.8 1.2-3 3-3h9.2c1.8 0 3 1.2 3 3v6.2c0 1.8-1.2 3-3 3h-5.4l-4 3.6v-3.6c-1.8 0-2.8-1.2-2.8-3z"/>
+              <path d="M35 17h.1M38.2 17h.1M41.4 17h.1" stroke-width="2.2"/>
+            </g>
+          </svg>
+          <div class="card-title">People who use AI at work</div>
+          <p class="card-text">We bring in people from companies using AI right now, so you hear what's working for them and what isn't.</p>
+        </div>
+        <div class="card">
+          <svg class="card-icon" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <path d="M27.4 4.6c13.8.4 23.6 10 23.4 23.6-.2 13.6-10.2 23.2-23.4 23C14 51 4.8 41.4 5 28 5.2 14.6 14.2 4.2 27.4 4.6z" fill="#1a2740" stroke="rgba(201,168,76,.35)" stroke-width="1"/>
+            <g filter="url(#hand)" stroke="#c9a84c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12.4 21.2c10.4-.6 20.8-.6 31.2 0l-.5 18c-10 .6-20.2.6-30.2 0z"/>
+              <path d="M22.6 21v-3.8c0-1.4.8-2.2 2.2-2.2h6.4c1.4 0 2.2.8 2.2 2.2V21"/>
+              <path d="M12.8 28.8c4.8 1.6 9.4 2.2 13.2 2.2M30 31c4.4 0 9-.6 13.4-2.2"/>
+              <path d="M26 29.4h4v3.6h-4z"/>
+            </g>
+          </svg>
+          <div class="card-title">Real projects</div>
+          <p class="card-text">We're starting to work with local companies on real problems, which means experience you can actually talk about in an interview.</p>
+        </div>
+        <div class="card">
+          <svg class="card-icon" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <path d="M28.2 5c13.4-.2 23 9.8 22.8 23.4-.2 13.2-10 22.8-23.2 22.6C14.4 50.8 5 41.6 5.2 28.2 5.4 14.8 15 5.2 28.2 5z" fill="#1a2740" stroke="rgba(201,168,76,.35)" stroke-width="1"/>
+            <g filter="url(#hand)" stroke="#c9a84c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M28 13v26.6"/>
+              <path d="M21 41.2c4.6-.6 9.4-.6 14 0"/>
+              <path d="M15 18.4c8.6-1.8 17.4-1.8 26 0"/>
+              <path d="M15 18.6l-4.2 10.2M15 18.6l4.2 10.2M41 18.4l-4.2 10.2M41 18.4l4.2 10.2"/>
+              <path d="M10.4 29c1.6 3.4 7.4 3.4 9.2 0zM36.4 28.8c1.6 3.4 7.4 3.4 9.2 0z"/>
+              <circle cx="28" cy="12" r="1.4"/>
+            </g>
+          </svg>
+          <div class="card-title">Honest about the limits</div>
+          <p class="card-text">We talk about what AI gets wrong and how to use it responsibly. That part matters as much as the rest.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-left">© 2026 USD AI Society · Knauss School of Business · University of San Diego</div>
+      <div class="footer-links">
+        <a href="mailto:usdaisociety@gmail.com">Contact</a>
+        <a href="https://www.instagram.com/usdaisociety/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.linkedin.com/company/usd-ai-society" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="page" id="page-events" tabindex="-1">
+    <section class="section" aria-labelledby="events-title">
+      <div class="section-header">
+        <div class="section-tag">Events</div>
+        <h2 class="section-title" id="events-title">Next up</h2>
+      </div>
+
+      <div class="events-layout">
+        <article class="next-event">
+          <div class="ne-date" aria-hidden="true">
+            <span class="ne-day">20</span>
+            <span class="stack"><span class="ne-month">Oct</span><span class="ne-dow">Tuesday</span></span>
+          </div>
+          <div class="ne-body">
+            <div class="ne-top">
+              <span class="ne-label">Workshop</span>
+              <span class="countdown" data-countdown hidden></span>
+            </div>
+            <h3>Build your own agent</h3>
+            <ul class="ne-meta">
+              <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="7.2"/><path d="M9 4.8V9l2.8 1.8"/></svg>Tuesday, October 20 · 12:30 PM</li>
+              <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 16.5s5.5-5 5.5-9.2A5.5 5.5 0 0 0 3.5 7.3C3.5 11.5 9 16.5 9 16.5z"/><circle cx="9" cy="7.4" r="2"/></svg>Knauss School of Business · room announced soon</li>
+              <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6.5" cy="6" r="2.4"/><path d="M2 15c.4-2.8 2.2-4.3 4.5-4.3S10.6 12.2 11 15"/><circle cx="12.6" cy="6.6" r="2"/><path d="M12 10.8c2 0 3.5 1.3 3.9 3.8"/></svg>60 seats · members hear first</li>
+            </ul>
+            <p class="ne-text">Bring your laptop and your USD login. You'll build a working AI assistant in Gemini for something you actually do every day, and you'll understand every part of it because you'll write it yourself. You leave with it running.</p>
+            <p class="ne-small">Seats are limited. Members get the first look, so joining is the best way to get one.</p>
+            <div class="btn-row">
+              <a class="btn btn-primary" href="https://forms.gle/fczNEGVzD31uHVJS7" target="_blank" rel="noopener">Become a member</a>
+            </div>
+          </div>
+        </article>
+
+        <div class="notes">
+          <div class="section-header">
+            <div class="section-tag">Field notes</div>
+            <h2 class="section-title">What we've been up to</h2>
+          </div>
+          <ol class="timeline" reversed>
+            <li class="upcoming" data-upcoming-row><span class="tl-date">Oct 20</span><span class="tl-dot"></span><span class="tl-text">First workshop. Build your own agent. <span class="tl-tag" data-upcoming-tag>Upcoming</span></span></li>
+            <li><span class="tl-date">Oct 4</span><span class="tl-dot"></span><span class="tl-text">Board meeting. We set the date for our first workshop.</span></li>
+            <li><span class="tl-date">Oct 1</span><span class="tl-dot"></span><span class="tl-text">Dr. Alan Lerchbacker became our official faculty advisor.</span></li>
+            <li><span class="tl-date">Sept 17</span><span class="tl-dot"></span><span class="tl-text">Sent our first email to members.</span></li>
+            <li><span class="tl-date">Sept 15</span><span class="tl-dot"></span><span class="tl-text">Alcalá Bazaar. More than fifty students signed up.</span></li>
+            <li><span class="tl-date">June 3</span><span class="tl-dot"></span><span class="tl-text">USD approved our constitution.</span></li>
+            <li><span class="tl-date">May 13</span><span class="tl-dot"></span><span class="tl-text">Our first board was announced.</span></li>
+            <li><span class="tl-date">Spring 2026</span><span class="tl-dot"></span><span class="tl-text">Started in MGMT 300.</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-left">© 2026 USD AI Society · Knauss School of Business · University of San Diego</div>
+      <div class="footer-links">
+        <a href="mailto:usdaisociety@gmail.com">Contact</a>
+        <a href="https://www.instagram.com/usdaisociety/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.linkedin.com/company/usd-ai-society" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- EXEC BOARD -->
+  <div class="page" id="page-board" tabindex="-1">
+    <section class="section" aria-labelledby="board-title">
+      <div class="section-header">
+        <div class="section-tag">The team</div>
+        <h2 class="section-title" id="board-title">Meet the Executive Board</h2>
+      </div>
+      <div class="leadership-grid">
+        <div class="leader-card">
+          <div class="leader-avatar"><img src="../photos/nick-tamer.jpg" alt="Nick Tamer" loading="lazy" onerror="this.parentElement.textContent='NT'"></div>
+          <div>
+            <div class="leader-name">Nick Tamer</div>
+            <span class="leader-role">Chief Executive Officer</span>
+            <p class="leader-bio">Runs the Society and keeps the rest of us moving in the same direction.</p>
+          </div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-avatar"><img src="../photos/maxim-golubev.jpg" alt="Maxim Golubev" loading="lazy" onerror="this.parentElement.textContent='MG'"></div>
+          <div>
+            <div class="leader-name">Maxim Golubev</div>
+            <span class="leader-role">Chief Operating Officer</span>
+            <p class="leader-bio">Designs our workshops and keeps the operation organized.</p>
+          </div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-avatar"><img src="../photos/ari-price.jpg" alt="Ari Price" loading="lazy" onerror="this.parentElement.textContent='AP'"></div>
+          <div>
+            <div class="leader-name">Ari Price</div>
+            <span class="leader-role">Chief Marketing Officer</span>
+            <p class="leader-bio">Runs our brand, our social media and this website.</p>
+          </div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-avatar"><img src="../photos/isaiah-razavi.jpg" alt="Isaiah Razavi" loading="lazy" onerror="this.parentElement.textContent='IR'"></div>
+          <div>
+            <div class="leader-name">Isaiah Razavi</div>
+            <span class="leader-role">Director of External Relations</span>
+            <p class="leader-bio">Works on partnerships with companies and organizations outside USD.</p>
+          </div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-avatar"><img src="../photos/carter-voerge.jpg" alt="Carter Voerge" loading="lazy" onerror="this.parentElement.textContent='CV'"></div>
+          <div>
+            <div class="leader-name">Carter Voerge</div>
+            <span class="leader-role">Chief Financial Officer</span>
+            <p class="leader-bio">Handles our budget and funding.</p>
+          </div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-avatar"><img src="../photos/hayaa-khetia.jpg" alt="Hayaa Khetia" loading="lazy" onerror="this.parentElement.textContent='HK'"></div>
+          <div>
+            <div class="leader-name">Hayaa Khetia</div>
+            <span class="leader-role">Secretary</span>
+            <p class="leader-bio">Keeps our meetings, notes and calendar in order.</p>
+          </div>
+        </div>
+        <div class="leader-card advisor">
+          <div class="leader-avatar"><img src="../photos/alan-lerchbacker.jpg" alt="Dr. Alan Lerchbacker" loading="lazy" onerror="this.parentElement.textContent='AL'"></div>
+          <div>
+            <div class="leader-name">Dr. Alan Lerchbacker</div>
+            <span class="leader-role">Faculty Advisor</span>
+            <p class="leader-bio">Teaches at Knauss and runs his own company, F&amp;A International. He connects us with business leaders across San Diego.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-left">© 2026 USD AI Society · Knauss School of Business · University of San Diego</div>
+      <div class="footer-links">
+        <a href="mailto:usdaisociety@gmail.com">Contact</a>
+        <a href="https://www.instagram.com/usdaisociety/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.linkedin.com/company/usd-ai-society" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MISSION -->
+  <div class="page" id="page-mission" tabindex="-1">
+    <section class="section" aria-labelledby="mission-title">
+      <div class="section-header">
+        <div class="section-tag">Mission</div>
+        <h2 class="section-title" id="mission-title">What we believe</h2>
+      </div>
+      <div class="values-list">
+        <div class="value-item">
+          <span class="value-num">01</span>
+          <div class="value-content">
+            <p class="lead-line">AI is going to show up in every job, not only the technical ones.</p>
+            <p>Accountants, marketers and nurses will all work alongside it, and the people who learn early will have an easier time.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">02</span>
+          <div class="value-content">
+            <p class="lead-line">You learn it by building something you'll actually use.</p>
+            <p>A demo you forget by Friday doesn't count.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">03</span>
+          <div class="value-content">
+            <p class="lead-line">Using AI well includes knowing where it fails.</p>
+            <p>We'd rather you leave skeptical and skilled than excited and careless.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">04</span>
+          <div class="value-content">
+            <p class="lead-line">The best ideas come from mixing people.</p>
+            <p>A finance major and a philosophy major should be building in the same room.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="started-title">
+      <div class="mission-layout">
+        <figure>
+          <div class="section-tag">Our mission</div>
+          <blockquote class="mission-statement">“To foster a community of USD students who are prepared to lead in a future shaped by artificial intelligence, grounded in a commitment to the ethical and responsible use of AI in business.”</blockquote>
+          <figcaption class="attribution">From our constitution</figcaption>
+        </figure>
+        <div>
+          <div class="section-tag">How we started</div>
+          <h3 class="sub-title" id="started-title">It started in a class</h3>
+          <p class="mission-body">The AI Society grew out of Dr. Alan Lerchbacker's MGMT 300 class in spring 2026. A group of his students wanted a place at USD to actually learn AI instead of just reading headlines about it, so we started one.</p>
+          <p class="mission-body">By May we had a board. In September we set up a table at the Alcalá Bazaar and more than fifty students signed up. Our first workshop is on <strong>October 20</strong>.</p>
+          <a class="text-link" href="#events" data-route="events">See the field notes</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-left">© 2026 USD AI Society · Knauss School of Business · University of San Diego</div>
+      <div class="footer-links">
+        <a href="mailto:usdaisociety@gmail.com">Contact</a>
+        <a href="https://www.instagram.com/usdaisociety/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.linkedin.com/company/usd-ai-society" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- WORK WITH US -->
+  <div class="page" id="page-work-with-us" tabindex="-1">
+    <section class="section" aria-labelledby="work-title">
+      <div class="section-header">
+        <div class="section-tag">For companies</div>
+        <h2 class="section-title" id="work-title">Work with us</h2>
+      </div>
+      <div class="mission-layout">
+        <div>
+          <p class="mission-statement" style="margin-bottom:36px">If you work somewhere that's figuring out AI, we'd like to meet you.</p>
+          <p class="mission-body">We're business students from every major learning to use AI well, and we learn best from people doing it for real.</p>
+          <p class="mission-body">We're new, so the people who work with us early help decide what this becomes.</p>
+          <div class="btn-row" style="margin-top:32px">
+            <a class="btn btn-primary" href="mailto:usdaisociety@gmail.com">Email usdaisociety@gmail.com</a>
+          </div>
+        </div>
+        <div class="values-list single">
+          <div class="value-item">
+            <span class="value-num">01</span>
+            <div class="value-content"><h4>Speak at a meeting</h4><p>Twenty minutes on how your team actually uses AI goes a long way with us.</p></div>
+          </div>
+          <div class="value-item">
+            <span class="value-num">02</span>
+            <div class="value-content"><h4>Run a workshop</h4><p>Show students the tools your industry uses day to day.</p></div>
+          </div>
+          <div class="value-item">
+            <span class="value-num">03</span>
+            <div class="value-content"><h4>Bring us a problem</h4><p>Give a team of students a real question from your business. You get fresh eyes and honest work.</p></div>
+          </div>
+          <div class="value-item">
+            <span class="value-num">04</span>
+            <div class="value-content"><h4>Meet future hires</h4><p>Our members are business students who know how to work with AI. We'd love to introduce you.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-left">© 2026 USD AI Society · Knauss School of Business · University of San Diego</div>
+      <div class="footer-links">
+        <a href="mailto:usdaisociety@gmail.com">Contact</a>
+        <a href="https://www.instagram.com/usdaisociety/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.linkedin.com/company/usd-ai-society" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- JOIN -->
+  <div class="page" id="page-join" tabindex="-1">
+    <section class="section" aria-labelledby="join-title">
+      <div class="section-header">
+        <div class="section-tag">Become a member</div>
+        <h2 class="section-title" id="join-title">Join the AI Society</h2>
+      </div>
+      <div class="mission-layout">
+        <div>
+          <p class="mission-statement" style="margin-bottom:36px">It's free and open to every USD student.</p>
+          <p class="mission-body">You don't need to know how to code. Most of our members don't.</p>
+          <p class="mission-body">Members hear about events first, and workshop seats are limited, so joining is the best way to get one.</p>
+        </div>
+        <div class="cta-box join-box">
+          <img src="../logo.png" alt="" width="64" height="64" />
+          <p class="big">Workshop seats are limited.</p>
+          <p class="small">Our first workshop, Build your own agent, is Tuesday, October 20 at 12:30&nbsp;PM. Members hear first.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://forms.gle/fczNEGVzD31uHVJS7" target="_blank" rel="noopener">Become a member</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-left">© 2026 USD AI Society · Knauss School of Business · University of San Diego</div>
+      <div class="footer-links">
+        <a href="mailto:usdaisociety@gmail.com">Contact</a>
+        <a href="https://www.instagram.com/usdaisociety/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.linkedin.com/company/usd-ai-society" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </footer>
+  </div>
+  </main>
+
+  <script>
+  (function () {
+    /* Tabs, driven by the URL hash so every tab has a shareable link */
+    var routes = ['home', 'events', 'board', 'mission', 'work-with-us', 'join'];
+    var nav = document.getElementById('nav');
+    var menuBtn = document.getElementById('menuBtn');
+
+    function show(name, focus) {
+      if (routes.indexOf(name) === -1) name = 'home';
+      document.querySelectorAll('.page').forEach(function (p) { p.classList.toggle('active', p.id === 'page-' + name); });
+      document.querySelectorAll('.nav-links a').forEach(function (a) {
+        if (a.dataset.route === name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+      });
+      nav.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      window.scrollTo(0, 0);
+      if (focus) { var pg = document.getElementById('page-' + name); if (pg) pg.focus({ preventScroll: true }); }
+      window.dispatchEvent(new Event('pagechange'));
+    }
+    window.showPage = show;
+    window.addEventListener('hashchange', function () { show(location.hash.slice(1), true); });
+    menuBtn.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    show(location.hash.slice(1), false);
+
+    /* Countdown to the first workshop: Oct 20, 2026, 12:30 PM Pacific (19:30 UTC) */
+    var START = Date.UTC(2026, 9, 20, 19, 30);
+    var now = Date.now();
+    var badges = document.querySelectorAll('[data-countdown]');
+    if (now < START) {
+      var parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit' })
+        .format(new Date(now)).split('-').map(Number);
+      var days = Math.round((Date.UTC(2026, 9, 20) - Date.UTC(parts[0], parts[1] - 1, parts[2])) / 864e5);
+      var label = days <= 0 ? 'Today' : days === 1 ? 'Tomorrow' : 'In ' + days + ' days';
+      badges.forEach(function (b) { b.textContent = label; b.hidden = false; });
+    } else {
+      document.querySelectorAll('[data-upcoming-tag]').forEach(function (t) { t.hidden = true; });
+      document.querySelectorAll('[data-upcoming-row]').forEach(function (r) { r.classList.remove('upcoming'); });
+    }
+
+    /* Constellation background (same look as the current site, lighter on phones) */
+    var C = document.getElementById('heroCanvas');
+    if (!C) return;
+    var X = C.getContext('2d');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var W, H, DPR;
+    var mobile = window.innerWidth < 768;
+    var COUNT = mobile ? 45 : 95, DIST = mobile ? 110 : 150;
+    var nodes = [];
+    function resize() {
+      DPR = Math.min(window.devicePixelRatio || 1, 2);
+      W = C.parentElement.offsetWidth; H = C.parentElement.offsetHeight;
+      if (!W || !H) return;
+      C.width = W * DPR; C.height = H * DPR;
+      X.setTransform(DPR, 0, 0, DPR, 0, 0);
+    }
+    resize();
+    for (var i = 0; i < COUNT; i++) {
+      nodes.push({ x: Math.random() * (W || 1200), y: Math.random() * (H || 700),
+        vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+        r: 0.8 + Math.random() * 1.6, o: 0.15 + Math.random() * 0.35, ph: Math.random() * 6.28 });
+    }
+    function draw() {
+      X.clearRect(0, 0, W, H);
+      for (var a = 0; a < nodes.length; a++) {
+        for (var b = a + 1; b < nodes.length; b++) {
+          var dx = nodes[a].x - nodes[b].x, dy = nodes[a].y - nodes[b].y, d = Math.sqrt(dx * dx + dy * dy);
+          if (d < DIST) {
+            X.strokeStyle = 'rgba(201,169,97,' + ((1 - d / DIST) * 0.16) + ')';
+            X.lineWidth = 0.6; X.beginPath(); X.moveTo(nodes[a].x, nodes[a].y); X.lineTo(nodes[b].x, nodes[b].y); X.stroke();
+          }
+        }
+      }
+      for (var k = 0; k < nodes.length; k++) {
+        var n = nodes[k], al = n.o * (0.75 + 0.25 * Math.sin(n.ph));
+        X.fillStyle = 'rgba(201,169,97,' + (al * 0.18) + ')';
+        X.beginPath(); X.arc(n.x, n.y, n.r * 5, 0, 6.283); X.fill();
+        X.fillStyle = 'rgba(217,189,126,' + Math.min(1, al * 1.4) + ')';
+        X.beginPath(); X.arc(n.x, n.y, n.r, 0, 6.283); X.fill();
+      }
+    }
+    function step() {
+      for (var k = 0; k < nodes.length; k++) {
+        var n = nodes[k];
+        n.x += n.vx; n.y += n.vy; n.ph += 0.01;
+        if (n.x < -30) n.x = W + 30; if (n.x > W + 30) n.x = -30;
+        if (n.y < -30) n.y = H + 30; if (n.y > H + 30) n.y = -30;
+      }
+    }
+    var home = document.getElementById('page-home');
+    function frame() {
+      if (home.classList.contains('active') && !document.hidden) { step(); draw(); }
+      requestAnimationFrame(frame);
+    }
+    window.addEventListener('resize', function () { resize(); draw(); });
+    window.addEventListener('pagechange', function () { resize(); draw(); });
+    if (reduce) draw(); else requestAnimationFrame(frame);
+  })();
+  </script>
+</body>
+</html>
