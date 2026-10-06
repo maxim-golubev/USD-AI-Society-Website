@@ -5,7 +5,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>USD AI Society</title>
-<meta name="description" content="The USD AI Society is a student club at the Knauss School of Business for anyone who wants to get good at using AI. Any major, no coding needed, free to join." />
+<meta name="description" content="The USD AI Society is a student club at the Knauss School of Business for anyone who wants to get good at using AI. Any major, no coding needed, free&nbsp;to&nbsp;join." />
 <link rel="icon" href="../logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -124,7 +124,10 @@
   .navbar .nav-join { color: var(--gold-ink); font-weight: 500; }
 
   /* ============ HERO ============ */
-  .hero { padding: clamp(40px, 7vw, 92px) 0 clamp(40px, 6vw, 80px); }
+  .hero { padding: clamp(40px, 7vw, 92px) 0 clamp(40px, 6vw, 80px); position: relative; }
+  .hero > *:not(.hero-canvas) { position: relative; z-index: 1; }
+  .hero-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .hero-canvas canvas { width: 100%; height: 100%; display: block; }
   .hero-grid {
     display: grid; grid-template-columns: repeat(12, 1fr); gap: 0 clamp(16px, 3vw, 40px);
     align-items: end;
@@ -434,6 +437,7 @@
     *, *::before, *::after { animation: none !important; transition: none !important; }
     .js .rv { opacity: 1; transform: none; }
   }
+  p, li, h1, h2, h3 { text-wrap: pretty; }
 </style>
 </head>
 <body>
@@ -468,10 +472,11 @@
 
   <!-- HERO -->
   <section class="hero">
+    <div class="hero-canvas" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
     <div class="wrap hero-grid">
       <h1>Bring a laptop.<em>Leave with an AI assistant that works <span class="gold">for you.</span></em></h1>
       <div class="hero-side">
-        <p><strong>The USD AI Society is a student club at the Knauss School of Business for anyone who wants to get good at using AI.</strong> Any major, no coding needed, free to join.</p>
+        <p><strong>The USD AI Society is a student club at the Knauss School of Business for anyone who wants to get good at using AI.</strong> Any major, no coding needed, free&nbsp;to&nbsp;join.</p>
         <div class="btns">
           <a class="btn btn-solid" href="https://forms.gle/fczNEGVzD31uHVJS7" target="_blank" rel="noopener">Become a member <span class="arr" aria-hidden="true">&rarr;</span></a>
           <a class="btn btn-line" href="#notice">See our first workshop</a>
@@ -498,7 +503,7 @@
         <div class="n-body">
           <p class="kicker" style="margin:0 0 6px">First workshop</p>
           <h2 id="notice-title">Build your own agent</h2>
-          <p>Bring your laptop and your USD login. You'll build a working AI assistant in Gemini for something you actually do every day, and you'll understand every part of it because you'll write it yourself. You leave with it running.</p>
+          <p>Bring your laptop and your USD login. You'll build a working AI agent for something you actually do every day, and you'll understand every part of it because you'll write it yourself. You leave with it running.</p>
           <p class="small">Seats are limited. Members get the first look, so joining is the best way to get one.</p>
         </div>
         <div class="n-side">
@@ -527,13 +532,13 @@
           <span class="d">Oct 20</span><span class="dot" aria-hidden="true"></span>
           <div class="t">First workshop. <em>Build your own agent.</em><br /><span class="flag" data-flag>Upcoming<span data-countdown-inline hidden></span></span></div>
         </li>
-        <li class="rv"><span class="d">Oct 4</span><span class="dot" aria-hidden="true"></span><div class="t">Board meeting. We set the date for our first workshop.</div></li>
+        <li class="rv"><span class="d">Oct 4</span><span class="dot" aria-hidden="true"></span><div class="t">Set the date for our first workshop.</div></li>
         <li class="rv"><span class="d">Oct 1</span><span class="dot" aria-hidden="true"></span><div class="t">Dr. Alan Lerchbacker became our official faculty advisor.</div></li>
         <li class="rv"><span class="d">Sept 17</span><span class="dot" aria-hidden="true"></span><div class="t">Sent our first email to members.</div></li>
-        <li class="rv"><span class="d">Sept 15</span><span class="dot" aria-hidden="true"></span><div class="t">Alcalá Bazaar. More than fifty students signed up.</div></li>
+        <li class="rv"><span class="d">Sept 15</span><span class="dot" aria-hidden="true"></span><div class="t">Alcalá Bazaar. More than fifty students signed up!</div></li>
         <li class="rv"><span class="d">June 3</span><span class="dot" aria-hidden="true"></span><div class="t">USD approved our constitution.</div></li>
         <li class="rv"><span class="d">May 13</span><span class="dot" aria-hidden="true"></span><div class="t">Our first board was announced.</div></li>
-        <li class="origin rv"><span class="d">Spring</span><span class="dot" aria-hidden="true"></span><div class="t">Started in MGMT 300.</div></li>
+        <li class="origin rv"><span class="d">Spring</span><span class="dot" aria-hidden="true"></span><div class="t">Started in Dr. Lerchbacker's classes.</div></li>
       </ol>
     </div>
   </section>
@@ -607,7 +612,7 @@
       <div class="sec-head"><svg class="num" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 0L6.2 3.8 10 5 6.2 6.2 5 10 3.8 6.2 0 5 3.8 3.8z"/></svg><h2 id="start-title">How we started</h2></div>
       <div class="start-grid">
         <div class="start-text rv">
-          <p>The AI Society grew out of Dr. Alan Lerchbacker's MGMT 300 class in spring 2026. A group of his students wanted a place at USD to actually learn AI instead of just reading headlines about it, so we started one.</p>
+          <p>The AI Society grew out of Dr. Alan Lerchbacker's classes at Knauss in spring 2026. A group of his students wanted a place at USD to actually learn AI instead of just reading headlines about it, so we started one.</p>
           <p>By May we had a board. In September we set up a table at the Alcalá Bazaar and more than fifty students signed up. Our first workshop is on <span style="white-space:nowrap">October 20.<svg class="end" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 0L6.2 3.8 10 5 6.2 6.2 5 10 3.8 6.2 0 5 3.8 3.8z" fill="#c9a84c"/></svg></span></p>
         </div>
         <figure class="pull rv">
@@ -677,7 +682,7 @@
       <div class="sec-head"><svg class="num" viewBox="0 0 10 10" aria-hidden="true"><path d="M5 0L6.2 3.8 10 5 6.2 6.2 5 10 3.8 6.2 0 5 3.8 3.8z"/></svg><h2 id="work-title">Work with us</h2></div>
       <div class="work-grid">
         <div class="work-intro rv">
-          <p>If you work somewhere that's figuring out AI, we'd like to meet you. We're business students from every major learning to use AI well, and we learn best from people doing it for real.</p>
+          <p>If you work somewhere that's figuring out AI, we'd love to meet you. We're business students from every major learning to use AI well, and we learn best from people doing it for real.</p>
           <p class="closing">We're new, so the people who work with us early help decide what this becomes.<br /><a href="mailto:usdaisociety@gmail.com">usdaisociety@gmail.com</a></p>
         </div>
         <ol class="offers">
@@ -717,7 +722,38 @@
 </footer>
 
 <script>
+  /* Constellation background: same algorithm as the current site's hero */
+  function initConstellation(canvas, rgb, strength, isActive) {
+    if (!canvas) return;
+    var F2=0.5*(Math.sqrt(3)-1),G2=(3-Math.sqrt(3))/6;
+    var grad3=[[1,1],[-1,1],[1,-1],[-1,-1],[1,0],[-1,0],[0,1],[0,-1]];
+    var perm=new Uint8Array(512);
+    (function(){var p=new Uint8Array(256),i,j,t;for(i=0;i<256;i++)p[i]=i;for(i=255;i>0;i--){j=Math.floor(Math.random()*(i+1));t=p[i];p[i]=p[j];p[j]=t;}for(i=0;i<512;i++)perm[i]=p[i&255];})();
+    function noise2D(x,y){var s=(x+y)*F2,i=Math.floor(x+s),j=Math.floor(y+s),t=(i+j)*G2,x0=x-(i-t),y0=y-(j-t),i1=x0>y0?1:0,j1=x0>y0?0:1,x1=x0-i1+G2,y1=y0-j1+G2,x2=x0-1+2*G2,y2=y0-1+2*G2,ii=i&255,jj=j&255,n0=0,n1=0,n2=0,g,t0=0.5-x0*x0-y0*y0;if(t0>0){t0*=t0;g=grad3[perm[ii+perm[jj]]%8];n0=t0*t0*(g[0]*x0+g[1]*y0);}var t1=0.5-x1*x1-y1*y1;if(t1>0){t1*=t1;g=grad3[perm[ii+i1+perm[jj+j1]]%8];n1=t1*t1*(g[0]*x1+g[1]*y1);}var t2=0.5-x2*x2-y2*y2;if(t2>0){t2*=t2;g=grad3[perm[ii+1+perm[jj+1]]%8];n2=t2*t2*(g[0]*x2+g[1]*y2);}return 70*(n0+n1+n2);}
+    var X=canvas.getContext('2d'),W,H,DPR,mobile=window.innerWidth<768;
+    var COUNT=mobile?50:100,DIST=mobile?115:155,nodes=[],signals=[],lastSig=0,startT=null;
+    function resize(){DPR=Math.min(window.devicePixelRatio||1,2);W=canvas.parentElement.offsetWidth;H=canvas.parentElement.offsetHeight;canvas.width=W*DPR;canvas.height=H*DPR;canvas.style.width=W+'px';canvas.style.height=H+'px';X.setTransform(DPR,0,0,DPR,0,0);}
+    resize();
+    for(var i=0;i<COUNT;i++)nodes.push({x:Math.random()*(W||window.innerWidth),y:Math.random()*(H||window.innerHeight),vx:(Math.random()-0.5)*0.22,vy:(Math.random()-0.5)*0.22,sz:0.8+Math.random()*1.6,op:0.1+Math.random()*0.3,ph:Math.random()*Math.PI*2,ps:0.005+Math.random()*0.01});
+    function c(a){return 'rgba('+rgb+','+(a*strength)+')';}
+    function frame(ts){
+      if(!startT)startT=ts;var el=ts-startT,nt=el*0.00007,a,b,n,dx,dy,d;
+      if(isActive&&!isActive()){requestAnimationFrame(frame);return;}
+      X.clearRect(0,0,W,H);
+      for(a=0;a<nodes.length;a++){n=nodes[a];var nv=noise2D(n.x*0.0018,n.y*0.0018+nt);n.vx+=Math.cos(nv*Math.PI*2)*0.007;n.vy+=Math.sin(nv*Math.PI*2)*0.007;n.vx*=0.993;n.vy*=0.993;n.x+=n.vx;n.y+=n.vy;n.ph+=n.ps;if(n.x<-30)n.x=W+30;if(n.x>W+30)n.x=-30;if(n.y<-30)n.y=H+30;if(n.y>H+30)n.y=-30;}
+      for(a=0;a<nodes.length;a++)for(b=a+1;b<nodes.length;b++){dx=nodes[a].x-nodes[b].x;dy=nodes[a].y-nodes[b].y;d=Math.sqrt(dx*dx+dy*dy);if(d<DIST){X.strokeStyle=c((1-d/DIST)*0.14);X.lineWidth=0.6;X.beginPath();X.moveTo(nodes[a].x,nodes[a].y);X.lineTo(nodes[b].x,nodes[b].y);X.stroke();}}
+      if(el-lastSig>700){lastSig=el;outer:for(a=0;a<nodes.length;a++)for(b=a+1;b<nodes.length;b++){dx=nodes[a].x-nodes[b].x;dy=nodes[a].y-nodes[b].y;if(Math.sqrt(dx*dx+dy*dy)<DIST&&Math.random()<0.004){signals.push({a:a,b:b,p:0,s:0.006+Math.random()*0.008});break outer;}}}
+      for(var k=signals.length-1;k>=0;k--){var s=signals[k];s.p+=s.s;if(s.p>1){signals.splice(k,1);continue;}var na=nodes[s.a],nb=nodes[s.b],sx=na.x+(nb.x-na.x)*s.p,sy=na.y+(nb.y-na.y)*s.p,sA=Math.sin(s.p*Math.PI)*0.8;X.fillStyle=c(sA);X.beginPath();X.arc(sx,sy,2,0,Math.PI*2);X.fill();var g=X.createRadialGradient(sx,sy,0,sx,sy,16);g.addColorStop(0,c(sA*0.35));g.addColorStop(1,c(0));X.fillStyle=g;X.beginPath();X.arc(sx,sy,16,0,Math.PI*2);X.fill();}
+      for(a=0;a<nodes.length;a++){n=nodes[a];var al=n.op*(0.7+0.3*Math.sin(n.ph)),gg=X.createRadialGradient(n.x,n.y,0,n.x,n.y,n.sz*6);gg.addColorStop(0,c(al*0.25));gg.addColorStop(1,c(0));X.fillStyle=gg;X.beginPath();X.arc(n.x,n.y,n.sz*6,0,Math.PI*2);X.fill();X.fillStyle=c(Math.min(1,al*1.3));X.beginPath();X.arc(n.x,n.y,n.sz,0,Math.PI*2);X.fill();}
+      requestAnimationFrame(frame);
+    }
+    window.addEventListener('resize',resize);
+    requestAnimationFrame(frame);
+  }
+</script>
+<script>
 (function () {
+  initConstellation(document.getElementById('heroCanvas'), '26,39,64', 0.55, function () { return !document.hidden && window.scrollY < window.innerHeight * 1.2; });
   var root = document.documentElement;
   root.classList.add('js');
 
